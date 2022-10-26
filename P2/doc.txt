@@ -1,0 +1,12 @@
+1.
+	Estado guarda un puntero al tipo estado, para usar las funciones de la P1
+	operador guarda el operador a realizar
+	int costeCamino guarda el coste que llevamos acumulado
+	profundidad guarda la profundidad a la que vamos
+	padre guarda el padre
+
+2.	Esta implementado en profundidad.
+
+3.	Se entran en bucles infinitos si se hace en profundidad, pues se generan hijos
+	todo el rato, para solucionarlo deberíamos establecer un límite de profundidad,
+	y a partir de ahi hacerlo en anchura.
