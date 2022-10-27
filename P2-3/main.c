@@ -12,6 +12,6 @@
 #include "busqueda.h"
 
 int main(){
-    solucionFin(busqueda());
+    solucionFin(busquedaAncRepe());
     return 0;
 }

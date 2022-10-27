@@ -9,7 +9,6 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "listaia.h"
 #include "busqueda.h"
 
 void solucionFin(int res){
@@ -72,7 +71,22 @@ LISTA expandir(tNodo *nodo){
 return sucesores;
 }
 
-int busqueda(){
+int repetido(tNodo* e, LISTA L){
+    int es_repe = 0;
+    LISTA aux = L;
+    tNodo* i = (tNodo*)malloc(sizeof(tNodo));
+
+    while(!esVacia(aux) && !es_repe){
+        ExtraerPrimero(aux, i, sizeof(tNodo));
+        if(iguales(e->estado, i->estado))
+            es_repe = 1;
+        aux = aux->next;
+    }
+
+    return es_repe;
+}
+
+int busquedaAnc(){
     int objetivo=0, visitados=0;
     tNodo *Actual=(tNodo*) calloc(1,sizeof(tNodo));
     tNodo *Inicial=nodoInicial();
@@ -80,7 +94,7 @@ int busqueda(){
     LISTA Abiertos= VACIA;
     LISTA Sucesores= VACIA;
     InsertarPrimero(&Abiertos,(tNodo*) Inicial,sizeof(tNodo));
-    while (!esVacia(Abiertos) && !objetivo){
+    while (!esVacia(Abiertos) && !objetivo){ 
         visitados++;
         Actual=(tNodo*) calloc(1,sizeof(tNodo));
         ExtraerPrimero(Abiertos,Actual, sizeof(tNodo));
@@ -90,6 +104,68 @@ int busqueda(){
             Sucesores = expandir(Actual);
             Abiertos=Concatenar(Abiertos,Sucesores);
       }
+   }//while
+   
+    printf("\nVisitados= %d\n", visitados);
+    if (objetivo)
+        dispSolucion(Actual);
+    free(Sucesores);
+    free(Inicial);
+    free(Actual);
+    return objetivo;
+}
+
+int busquedaProf(){
+    int objetivo=0, visitados=0;
+    tNodo *Actual=(tNodo*) calloc(1,sizeof(tNodo));
+    tNodo *Inicial=nodoInicial();
+
+    LISTA Abiertos= VACIA;
+    LISTA Sucesores= VACIA;
+    InsertarPrimero(&Abiertos,(tNodo*) Inicial,sizeof(tNodo));
+    while (!esVacia(Abiertos) && !objetivo){ 
+        visitados++;
+        Actual=(tNodo*) calloc(1,sizeof(tNodo));
+        ExtraerPrimero(Abiertos,Actual, sizeof(tNodo));
+        EliminarPrimero(&Abiertos);
+        objetivo=testObjetivo(Actual->estado);
+        if (!objetivo){
+            Sucesores = expandir(Actual);
+            Abiertos=Concatenar(Sucesores,Abiertos);
+      }
+   }//while
+   
+    printf("\nVisitados= %d\n", visitados);
+    if (objetivo)
+        dispSolucion(Actual);
+    free(Sucesores);
+    free(Inicial);
+    free(Actual);
+    return objetivo;
+}
+
+int busquedaAncRepe(){
+    int objetivo=0, visitados=0;
+    tNodo *Actual=(tNodo*) calloc(1,sizeof(tNodo));
+    tNodo *Inicial=nodoInicial();
+
+    LISTA Abiertos= VACIA;
+    LISTA Cerrados = VACIA;
+    LISTA Sucesores= VACIA;
+    InsertarPrimero(&Abiertos,(tNodo*) Inicial,sizeof(tNodo));
+    while (!esVacia(Abiertos) && !objetivo){ 
+        visitados++;
+        Actual=(tNodo*) calloc(1,sizeof(tNodo));
+        ExtraerPrimero(Abiertos,Actual, sizeof(tNodo));
+        EliminarPrimero(&Abiertos);
+        if(!repetido(Actual, Cerrados)){
+            objetivo=testObjetivo(Actual->estado);
+            if (!objetivo){
+                Sucesores = expandir(Actual);
+                Abiertos=Concatenar(Abiertos,Sucesores);
+            }
+            InsertarUltimo(&Cerrados, Actual, sizeof(tNodo));
+        }        
    }//while
    
     printf("\nVisitados= %d\n", visitados);

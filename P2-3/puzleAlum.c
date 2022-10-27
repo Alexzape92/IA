@@ -93,7 +93,7 @@ int iguales(tEstado *s, tEstado *t)  //
          j = 0; i++;
       }
    }
-return ig;
+   return ig;
 }
 
 
