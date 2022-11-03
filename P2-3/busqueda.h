@@ -24,4 +24,7 @@ int repetido(tNodo* e, LISTA L);
 int busquedaProf(void);
 int busquedaAnc(void);
 int busquedaAncRepe(void);
+int busquedaProfRepe(void);
+int busquedaProfLimit(int limite);
+int busquedaProfIter(int limite);
 void solucionFin(int res);

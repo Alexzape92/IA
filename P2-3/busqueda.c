@@ -161,11 +161,6 @@ int busquedaAncRepe(){
         objetivo=testObjetivo(Actual->estado);
         repetida = repetido(Actual, Cerrados);
 
-        if(repetida == 0)
-            printf("No Repetido\n");
-        else
-            printf("Repetido\n");
-        dispNodo(Actual);
         if(!repetida && !objetivo){
             Sucesores = expandir(Actual);
             Abiertos=Concatenar(Abiertos,Sucesores);
@@ -176,7 +171,122 @@ int busquedaAncRepe(){
    }//while
    
     printf("\nVisitados= %d\n", visitados);
-    printf("\nRepetidos= %d", repetidos);
+    printf("\nRepetidos= %d\n", repetidos);
+    if (objetivo)
+        dispSolucion(Actual);
+    free(Sucesores);
+    free(Inicial);
+    free(Actual);
+    return objetivo;
+}
+
+int busquedaProfRepe(){
+    int objetivo=0, visitados=0, repetidos = 0, repetida = 0;
+    tNodo *Actual=(tNodo*) calloc(1,sizeof(tNodo));
+    tNodo *Inicial=nodoInicial();
+
+    LISTA Abiertos= VACIA;
+    LISTA Cerrados = VACIA;
+    LISTA Sucesores= VACIA;
+    InsertarPrimero(&Abiertos,(tNodo*) Inicial,sizeof(tNodo));
+    while (!esVacia(Abiertos) && !objetivo){ 
+        visitados++;
+        Actual=(tNodo*) calloc(1,sizeof(tNodo));
+        ExtraerPrimero(Abiertos,Actual, sizeof(tNodo));
+        EliminarPrimero(&Abiertos);
+        objetivo=testObjetivo(Actual->estado);
+        repetida = repetido(Actual, Cerrados);
+
+        if(!repetida && !objetivo){
+            Sucesores = expandir(Actual);
+            Abiertos=Concatenar(Sucesores,Abiertos);
+            InsertarUltimo(&Cerrados, Actual, sizeof(tNodo));
+        } 
+        else
+            repetidos++;       
+   }//while
+   
+    printf("\nVisitados= %d\n", visitados);
+    printf("\nRepetidos= %d\n", repetidos);
+    if (objetivo)
+        dispSolucion(Actual);
+    free(Sucesores);
+    free(Inicial);
+    free(Actual);
+    return objetivo;
+}
+
+int busquedaProfLimit(int limite){
+    int objetivo=0, visitados=0, repetidos = 0, repetida = 0;
+    tNodo *Actual=(tNodo*) calloc(1,sizeof(tNodo));
+    tNodo *Inicial=nodoInicial();
+
+    LISTA Abiertos= VACIA;
+    LISTA Cerrados = VACIA;
+    LISTA Sucesores= VACIA;
+    InsertarPrimero(&Abiertos,(tNodo*) Inicial,sizeof(tNodo));
+    while (!esVacia(Abiertos) && !objetivo){ 
+        visitados++;
+        Actual=(tNodo*) calloc(1,sizeof(tNodo));
+        ExtraerPrimero(Abiertos,Actual, sizeof(tNodo));
+        EliminarPrimero(&Abiertos);
+        objetivo=testObjetivo(Actual->estado);
+        repetida = repetido(Actual, Cerrados);
+
+        if(!repetida && !objetivo && Actual->profundidad < limite){
+            Sucesores = expandir(Actual);
+            Abiertos=Concatenar(Sucesores,Abiertos);
+            InsertarUltimo(&Cerrados, Actual, sizeof(tNodo));
+        } 
+        else
+            repetidos++;       
+   }//while
+   
+    printf("\nVisitados= %d\n", visitados);
+    printf("\nRepetidos= %d\n", repetidos);
+    if (objetivo)
+        dispSolucion(Actual);
+    free(Sucesores);
+    free(Inicial);
+    free(Actual);
+    return objetivo;
+}
+
+int busquedaProfIter(int limite){
+    int objetivo=0, visitados=0, repetidos = 0, repetida = 0;
+    tNodo *Actual=(tNodo*) calloc(1,sizeof(tNodo));
+    tNodo *Inicial=nodoInicial();
+
+    LISTA Abiertos= VACIA;
+    LISTA Cerrados = VACIA;
+    LISTA Sucesores= VACIA;
+    InsertarPrimero(&Abiertos,(tNodo*) Inicial,sizeof(tNodo));
+    while (!esVacia(Abiertos) && !objetivo){ 
+        visitados++;
+        Actual=(tNodo*) calloc(1,sizeof(tNodo));
+        ExtraerPrimero(Abiertos,Actual, sizeof(tNodo));
+        EliminarPrimero(&Abiertos);
+
+        if(Actual->profundidad == limite + 1)   //Ya hemos recorrido todos los estados que quedaban por encima de la profundidad limite
+            limite *= 2;
+
+        objetivo=testObjetivo(Actual->estado);
+        repetida = repetido(Actual, Cerrados);
+
+        if(!repetida && !objetivo){
+            Sucesores = expandir(Actual);
+            if(Actual->profundidad < limite)    //Si hemos llegado a la profundidad límite, concatenamos al final, si no, al principio
+                Abiertos=Concatenar(Sucesores,Abiertos);
+            else
+                Abiertos=Concatenar(Abiertos,Sucesores);
+            InsertarUltimo(&Cerrados, Actual, sizeof(tNodo));
+        } 
+        else
+            repetidos++;       
+   }//while
+   
+    printf("\nVisitados= %d\n", visitados);
+    printf("\nRepetidos= %d\n", repetidos);
     if (objetivo)
         dispSolucion(Actual);
     free(Sucesores);

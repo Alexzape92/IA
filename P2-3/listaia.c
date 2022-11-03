@@ -24,7 +24,7 @@ void InsertarPrimero(LISTA *c, void *n, int size){
 
 void ExtraerPrimero(LISTA c, void *n, int size){
     memcpy((void *) n, (void *) c->nodo,size);
-};//Extraer primer elemento
+}//Extraer primer elemento
 
 
 void EliminarPrimero(LISTA *c){
