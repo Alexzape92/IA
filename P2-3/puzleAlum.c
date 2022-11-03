@@ -83,16 +83,12 @@ void dispOperador(unsigned op)
 // Funci�n auxiliar para comprobar si dos puzles tienen las fichas colocadas en el mismo orden en el tablero
 int iguales(tEstado *s, tEstado *t)  //
 {
-   int ig = 1, i = 0, j = 0;
-   while(ig == 1 && i < N){
-      if(s->celdas[i][j] != t->celdas[i][j])
-         ig = 0;
-      if(j < N-1)
-         j++;
-      if(j == N - 1){
-         j = 0; i++;
+   int ig = 1;
+   for(int i = 0; i < N; i++)
+      for(int j = 0; j < N; j++){
+         if(s->celdas[i][j] != t->celdas[i][j])
+            ig = 0;
       }
-   }
    return ig;
 }
 

@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": false,
-      "cwd": "/home/alex/Documentos/IA/P2",
-      "program": "/home/alex/Documentos/IA/P2/build/Debug/outDebug",
+      "cwd": "/home/alex/Documentos/IA/P2-3",
+      "program": "/home/alex/Documentos/IA/P2-3/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

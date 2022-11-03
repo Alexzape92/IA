@@ -145,7 +145,7 @@ int busquedaProf(){
 }
 
 int busquedaAncRepe(){
-    int objetivo=0, visitados=0;
+    int objetivo=0, visitados=0, repetidos = 0, repetida = 0;
     tNodo *Actual=(tNodo*) calloc(1,sizeof(tNodo));
     tNodo *Inicial=nodoInicial();
 
@@ -158,17 +158,25 @@ int busquedaAncRepe(){
         Actual=(tNodo*) calloc(1,sizeof(tNodo));
         ExtraerPrimero(Abiertos,Actual, sizeof(tNodo));
         EliminarPrimero(&Abiertos);
-        if(!repetido(Actual, Cerrados)){
-            objetivo=testObjetivo(Actual->estado);
-            if (!objetivo){
-                Sucesores = expandir(Actual);
-                Abiertos=Concatenar(Abiertos,Sucesores);
-            }
+        objetivo=testObjetivo(Actual->estado);
+        repetida = repetido(Actual, Cerrados);
+
+        if(repetida == 0)
+            printf("No Repetido\n");
+        else
+            printf("Repetido\n");
+        dispNodo(Actual);
+        if(!repetida && !objetivo){
+            Sucesores = expandir(Actual);
+            Abiertos=Concatenar(Abiertos,Sucesores);
             InsertarUltimo(&Cerrados, Actual, sizeof(tNodo));
-        }        
+        } 
+        else
+            repetidos++;       
    }//while
    
     printf("\nVisitados= %d\n", visitados);
+    printf("\nRepetidos= %d", repetidos);
     if (objetivo)
         dispSolucion(Actual);
     free(Sucesores);
