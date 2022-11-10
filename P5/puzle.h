@@ -17,25 +17,25 @@
 #ifndef _tEstado_
 #define _tEstado_
    typedef struct {
-        int celdas[N][N];
-        int fila, col;  //representa la posición del huco
+      int celdas[N][N];
+      int fila, col;  //representa la posición del huco
    } tEstado;
 #endif
 
 
 static int puzle_inicial[N][N]=
 {
-  {1,2,3},
-  {8,5,4},
-  {6,7,0}
+  {1, 2, 3},
+  {8, 5, 4},
+  {6, 7, 0}
 };
 
 
 static int puzle_final[N][N]=
 {
-  {1,2,3},
-  {8,0,4},
-  {7,6,5}
+  {1, 2, 3},
+  {8, 0, 4},
+  {7, 6, 5}
 };
 
 
@@ -73,3 +73,5 @@ int iguales(tEstado *s, tEstado *t);
 
 /* Devuelve 1 si un estado es igual al estado objetivo. */
 int testObjetivo(tEstado *estado);
+
+int heuristica(tEstado *n);

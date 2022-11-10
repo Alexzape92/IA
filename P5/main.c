@@ -12,6 +12,6 @@
 #include "busqueda.h"
 
 int main(){
-    solucionFin(busquedaProfIter(3));
+    solucionFin(busquedaA());
     return 0;
 }
