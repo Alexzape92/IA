@@ -13,7 +13,6 @@
 #include "puzle.h"
 
 
-
 tEstado *crearEstado(int puzle[N][N])
 {
    tEstado *estado = (tEstado *) malloc(sizeof(tEstado));
@@ -143,6 +142,28 @@ tEstado *aplicaOperador(unsigned op, tEstado *estado)
          break;
    }
 return nuevo;
+}
+
+int manhattan(tEstado* e, tEstado* o, int x, int y){
+   int pieza = e->celdas[x][y];
+   for(int i = 0; i < N; i++)
+      for(int j = 0; j < N; j++){
+         if(o->celdas[i][j] == pieza)
+            return (abs(i-x) + abs(j-y));
+      }
+}
+
+int heuristicaManhattan(tEstado* n){
+   tEstado* objetivo  = estadoObjetivo();
+   int distancia = 0;
+   for(int i = 0; i < N; i++)
+      for(int j = 0; j < N; j++){
+         if(n->celdas[i][j] != 0){
+            distancia += manhattan(n, objetivo, i, j);
+         }
+      } 
+
+   return distancia; 
 }
 
 int heuristica(tEstado* n){

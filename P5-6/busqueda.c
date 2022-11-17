@@ -93,13 +93,25 @@ int repetidoA(tNodo* e, LISTA L){
 
     while(!esVacia(aux) && !es_repe){
         ExtraerPrimero(aux, i, sizeof(tNodo));
-        if(iguales(e->estado, i->estado) && e->valHeuristica + e->profundidad >= i->valHeuristica + e->profundidad)
+        if(iguales(e->estado, i->estado) && e->valHeuristica + e->profundidad >= i->valHeuristica + i->profundidad)
             es_repe = 1;
         aux = aux->next;
     }
 
     return es_repe;
 }
+
+int tamano(LISTA L){
+    LISTA aux = L;
+    int size = 0;
+    while(aux != NULL){
+        size++;
+        aux = aux->next;
+    }
+
+    return size;
+}
+
 
 int busquedaAnc(){
     int objetivo=0, visitados=0;
@@ -311,7 +323,7 @@ int busquedaProfIter(int limite){
 }
 
 int busquedaVoraz(){
-    int objetivo=0, visitados=0, repetidos = 0, repetida = 0;
+    int objetivo=0, visitados=0, repetidos = 0, repetida = 0, tamMax = 1, tamAct = 1, generados = 1;
     tNodo *Actual=(tNodo*) calloc(1,sizeof(tNodo));
     tNodo *Inicial=nodoInicial();
 
@@ -324,12 +336,20 @@ int busquedaVoraz(){
         Actual=(tNodo*) calloc(1,sizeof(tNodo));
         ExtraerPrimero(Abiertos,Actual, sizeof(tNodo));
         EliminarPrimero(&Abiertos);
+        tamAct--;
         objetivo=testObjetivo(Actual->estado);
         repetida = repetido(Actual, Cerrados);
 
         if(!repetida && !objetivo){
             Sucesores = expandir(Actual);
             Abiertos=ordenarLista(Abiertos,Sucesores, 0);
+            //Longitud máxima de la lista de abiertos
+            int numSuc = tamano(Sucesores);
+            generados += numSuc;
+            tamAct += numSuc;
+            if(tamAct > tamMax)
+                tamMax = tamAct;
+
             InsertarUltimo(&Cerrados, Actual, sizeof(tNodo));
         } 
         else
@@ -337,7 +357,9 @@ int busquedaVoraz(){
    }//while
    
     printf("\nVisitados= %d\n", visitados);
-    printf("\nRepetidos= %d\n", repetidos);
+    printf("Repetidos= %d\n", repetidos);
+    printf("Tamanno maximo abiertos = %d\n", tamMax);
+    printf("Nodos generados = %d\n", generados);
     if (objetivo)
         dispSolucion(Actual);
     free(Sucesores);
@@ -347,33 +369,43 @@ int busquedaVoraz(){
 }
 
 int busquedaA(){
-    int objetivo=0, visitados=0, repetidos = 0, repetida = 0;
+    int objetivo=0, visitados=0, repetidos = 0, repetida = 0, tamMax = 1, tamAct = 1, generados = 1;
     tNodo *Actual=(tNodo*) calloc(1,sizeof(tNodo));
     tNodo *Inicial=nodoInicial();
 
     LISTA Abiertos= VACIA;
     LISTA Cerrados = VACIA;
     LISTA Sucesores= VACIA;
-    InsertarPrimero(&Abiertos,(tNodo*) Inicial,sizeof(tNodo));
+    InsertarPrimero(&Abiertos,(tNodo*) Inicial,sizeof(tNodo));  //tamAct = tamMax = 1
     while (!esVacia(Abiertos) && !objetivo){ 
         visitados++;
         Actual=(tNodo*) calloc(1,sizeof(tNodo));
         ExtraerPrimero(Abiertos,Actual, sizeof(tNodo));
         EliminarPrimero(&Abiertos);
+        tamAct--;
         objetivo=testObjetivo(Actual->estado);
         repetida = repetidoA(Actual, Cerrados);
 
         if(!repetida && !objetivo){
             Sucesores = expandir(Actual);
             Abiertos=ordenarLista(Abiertos,Sucesores, 1);
+            //Tamaño máximo de la lista de abiertos
+            int numSuc = tamano(Sucesores);
+            generados += numSuc;
+            tamAct += numSuc;
+            if(tamAct > tamMax)
+                tamMax = tamAct;
+
             InsertarUltimo(&Cerrados, Actual, sizeof(tNodo));
         } 
         else
             repetidos++;       
    }//while
    
-    printf("\nVisitados= %d\n", visitados);
-    printf("\nRepetidos= %d\n", repetidos);
+    printf("Visitados= %d\n", visitados);
+    printf("Repetidos= %d\n", repetidos);
+    printf("Tamanno maximo abiertos = %d\n", tamMax);
+    printf("Nodos generados = %d\n", generados);
     if (objetivo)
         dispSolucion(Actual);
     free(Sucesores);

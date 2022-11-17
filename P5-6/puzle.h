@@ -11,7 +11,7 @@
 #define IZQUIERDA 3
 #define DERECHA 4
 #define NUM_OPERADORES 4
-#define N 3
+#define N 4
 
 
 #ifndef _tEstado_
@@ -25,17 +25,19 @@
 
 static int puzle_inicial[N][N]=
 {
-  {1, 2, 3},
-  {8, 5, 4},
-  {6, 7, 0}
+  {1, 2, 3, 4},
+  {5, 6, 15, 8},
+  {9, 10, 0, 12},
+  {13, 14, 7, 11}
 };
 
 
 static int puzle_final[N][N]=
 {
-  {1, 2, 3},
-  {8, 0, 4},
-  {7, 6, 5}
+  {1, 2, 3, 4},
+  {5, 6, 7, 8},
+  {9, 10, 11, 12},
+  {13, 14, 15, 0}
 };
 
 
