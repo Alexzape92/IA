@@ -8,9 +8,33 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 #include "tictactoe.h"
 
+int sqr(int a){
+    return ((int)sqrt(a));
+}
+
+int filasmax(tNodo *s){
+    int count = 0;
+    int cumple = 1, haymax = 0;
+
+    for(int i = 0; i < sqr(N); i++){
+        for(int j = i+sqr(N); j%N < 0; j++){
+            if(s->celdas[j] == -1)
+                cumple = 0;
+            if(s->celdas[j] == 1)
+                haymax = 1;
+        }
+        if(cumple == 1 && haymax == 0)
+            cumple = 0;
+        if(cumple == 1)
+            count++;
+    }
+    return count;
+}
+//--------------------------------------------------
 tNodo *estadoInicial()
 {
    return crearNodo(tablero_inicial);
@@ -35,11 +59,11 @@ tNodo *aplicaJugada(tNodo *actual, int jugador, int jugada){
     tNodo *nuevo = (tNodo *) malloc(sizeof(tNodo));
     memcpy(nuevo,actual,sizeof(tNodo));
     nuevo->celdas[jugada]=jugador;
-    nuevo->vacias--;  // marca la posición que indica pone la marca del jugador
+    nuevo->vacias--;  // marca la posiciï¿½n que indica pone la marca del jugador
     return nuevo;
 }
 int esValida(tNodo *actual, int jugada){
-    return (jugada>=0 && jugada<9 && actual->celdas[jugada]==0) ;  // si está vacía la posición, la jugada es válido
+    return (jugada>=0 && jugada<9 && actual->celdas[jugada]==0) ;  // si estï¿½ vacï¿½a la posiciï¿½n, la jugada es vï¿½lido
 }
 int opuesto( int jugador){
     return (jugador * -1);//Jugador 1 y Jugador -1
@@ -65,7 +89,7 @@ int terminal(tNodo *Nodo)
 }
 
 ////////////////////////////////////////
-//  VISUALIZACIÓN DE NodoS
+//  VISUALIZACIï¿½N DE NodoS
 ////////////////////////////////////////
 
 char marca(int i) {
@@ -89,8 +113,9 @@ void dispNodo(tNodo *b) {
      printf("---+---+---\n\n");
 }
 
+int heuristica(tNodo *s){
+    int max = 0;
+    int min = 0;
 
 
-
-
-
+}

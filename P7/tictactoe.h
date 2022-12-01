@@ -72,6 +72,8 @@ int opuesto( int jugador);
 */
 int lleno(tNodo *s);
 
+int heuristica(tNodo *s);
+
 
 
 
