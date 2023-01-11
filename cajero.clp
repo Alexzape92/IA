@@ -65,4 +65,5 @@
     (test (<= ?*ANNO* ?cad))
     =>
     (modify ?tarj (Validada SI))
+    (printout t "Se valido una tarjeta")
 )
